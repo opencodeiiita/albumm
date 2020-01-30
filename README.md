@@ -9,7 +9,11 @@
    1.0.0
 
 
+
 ### Installation
+
+To get this project up and running on your local machine, you need to do is clone or download this project
+
 To install all the dependencies do 
 
 `sudo apt update && sudo apt install golang`
@@ -21,8 +25,6 @@ To install all the dependencies do
 Enter the directory and use
 
 `go mod tidy`
-
-
 
 
 
@@ -61,6 +63,13 @@ or you can build a binary using
 
    --help, -h     show help (default: false)
    --version, -v  print the version (default: false)
+
+
+
+
+###Contributors
+
+See also the list of [contributors](<link to be updated>) who participated in the project.
 
 
 
