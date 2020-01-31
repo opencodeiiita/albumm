@@ -5,7 +5,7 @@
 **Albumm is a simple CLI application to download Albums from Flickr.**
 
 
-###VERSION:
+### VERSION:
    1.0.0
 
 
@@ -50,7 +50,7 @@ or you can build a binary using
 `go build`
 
 
-###Usage commands
+### Usage commands
 
 `go run *.go id`  - Get User ID of a username
 
@@ -59,7 +59,7 @@ or you can build a binary using
 `go run *.go help`  - Shows a list of commands or help for one command
 
 
-###GLOBAL OPTIONS:
+### GLOBAL OPTIONS:
 
    --help, -h     show help (default: false)
    --version, -v  print the version (default: false)
@@ -67,7 +67,7 @@ or you can build a binary using
 
 
 
-###Contributors
+### Contributors
 
 See also the list of [contributors](<link to be updated>) who participated in the project.
 
