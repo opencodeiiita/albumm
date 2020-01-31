@@ -22,8 +22,8 @@ func main() {
 			Aliases: []string{"name"},
 		},
 		&cli.StringFlag{
-			Name:    "album_name",
-			Value:   "Kite Flying 2020",
+			Name:    "album_id",
+			Value:   "72157712783898977",
 			Aliases: []string{"album"},
 		},
 		&cli.StringFlag{
@@ -65,6 +65,39 @@ func main() {
 				fmt.Printf("Here is a list of albums: \n")
 				for index, album := range albums {
 					fmt.Printf("%v) %v \n", index, album)
+				}
+
+				return nil
+			},
+		},
+		{
+			Name:  "download",
+			Usage: "Download an album",
+			Flags: myFlags,
+			Action: func(c *cli.Context) error {
+				photos, err := GetPhotosFromAlbum(c.String("flickr_userid"), c.String("album_id"))
+
+				if err != nil {
+					fmt.Println("No Such Album Found")
+					return nil
+				}
+
+				fmt.Printf("Here is the list of photos in album: \n")
+				for index, photo := range photos {
+					fmt.Printf("Downloading %v \n", photo)
+					links, err := GetPhotoSizes(index)
+
+					if err != nil {
+						fmt.Println("Image links not found")
+						return nil
+					}
+
+					err = DownloadPhoto(links["Original"], photo)
+					
+					if err != nil {
+						fmt.Println("Error in downloading image")
+						return nil
+					}
 				}
 
 				return nil

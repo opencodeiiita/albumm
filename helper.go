@@ -102,7 +102,11 @@ func GetAlbumsFromUserID(userID string) ([]string, error) {
 
 func GetPhotosFromAlbum(userID string, photosetID string) (map[string]string, error) {
 
-	req, _ := http.NewRequest("GET", URL, nil)
+	req, err := http.NewRequest("GET", URL, nil)
+
+	if err != nil {
+		return map[string]string{}, errors.New("API Request Failed")
+	}
 
 	q := req.URL.Query()
 	q.Add("method", "flickr.photosets.GetPhotos")
@@ -114,9 +118,17 @@ func GetPhotosFromAlbum(userID string, photosetID string) (map[string]string, er
 
 	req.URL.RawQuery = q.Encode()
 
-	resp, _ := client.Do(req)
+	resp, err := client.Do(req)
 
-	data, _ := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return map[string]string{}, errors.New("Something wrong with API")
+	}
+
+	data, err := ioutil.ReadAll(resp.Body)
+
+	if err != nil {
+		return map[string]string{}, errors.New("Can't read the response body")
+	}
 
 	var photos AlbumPhotos
 	json.Unmarshal(data, &photos)
@@ -131,7 +143,11 @@ func GetPhotosFromAlbum(userID string, photosetID string) (map[string]string, er
 
 func GetPhotoSizes(photoID string) (map[string]string, error) {
 
-	req, _ := http.NewRequest("GET", URL, nil)
+	req, err := http.NewRequest("GET", URL, nil)
+
+	if err != nil {
+		return map[string]string{}, errors.New("API Request Failed")
+	}
 
 	q := req.URL.Query()
 	q.Add("method", "flickr.photos.GetSizes")
@@ -142,16 +158,24 @@ func GetPhotoSizes(photoID string) (map[string]string, error) {
 
 	req.URL.RawQuery = q.Encode()
 
-	resp, _ := client.Do(req)
+	resp, err := client.Do(req)
 
-	data, _ := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return map[string]string{}, errors.New("Something wrong with API")
+	}
+
+	data, err := ioutil.ReadAll(resp.Body)
+
+	if err != nil {
+		return map[string]string{}, errors.New("Can't read the response body")
+	}
 
 	var sizes PhotoSizes
 	json.Unmarshal(data, &sizes)
 
 	links := make(map[string]string)
 	for _, photo := range sizes.Sizes.Size {
-		links[photo.Source] = photo.Label
+		links[photo.Label] = photo.Source
 	}
 
 	return links, nil
@@ -159,10 +183,20 @@ func GetPhotoSizes(photoID string) (map[string]string, error) {
 
 func DownloadPhoto(url string, filename string) error {
 
-	resp, _ := http.Get(url)
+	resp, err := http.Get(url)
+	if err != nil {
+		return errors.New("Can't get the image")
+	}
 
-	file, _ := os.Create(filename)
-	size, _ := io.Copy(file, resp.Body)
+	file, err := os.Create(filename)
+	if err != nil {
+		return errors.New("Can't create the image locally")
+	}
+
+	size, err := io.Copy(file, resp.Body)
+	if err != nil {
+		return errors.New("Can't generate the image")
+	}
 
 	fmt.Println(size)
 
