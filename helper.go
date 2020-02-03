@@ -175,7 +175,7 @@ func GetPhotoSizes(photoID string) (map[string]string, error) {
 
 	links := make(map[string]string)
 	for _, photo := range sizes.Sizes.Size {
-		links[photo.Source] = photo.Label
+		links[photo.Label] = photo.Source
 	}
 
 	return links, nil
